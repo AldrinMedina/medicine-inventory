@@ -44,6 +44,52 @@ export async function registerUser(username, email, password, role = "staff") {
   }
 }
 
+/**
+ * Forgot Password
+ * ------------------------------------------------------
+ * Sends a password reset link to user's email
+ *
+ * @param {string} email
+ * @returns {Object} response data
+ */
+export async function forgotPassword(email) {
+  try {
+    const res = await api.post("/auth/forgot-password", { email });
+    return res.data;
+  } catch (err) {
+    return (
+      err.response?.data || {
+        success: false,
+        message: "Error sending password reset email",
+      }
+    );
+  }
+}
+
+/**
+ * Reset Password
+ * ------------------------------------------------------
+ * Resets user password using token sent via email
+ *
+ * @param {string} token - reset token from URL
+ * @param {string} newPassword - new user password
+ * @returns {Object} response data
+ */
+export async function resetPassword(token, newPassword) {
+  try {
+    const res = await api.post("/auth/reset-password", { token, newPassword });
+    return res.data;
+  } catch (err) {
+    return (
+      err.response?.data || {
+        success: false,
+        message: "Error resetting password",
+      }
+    );
+  }
+}
+
+
 //
 // -------- MEDICINES --------
 //

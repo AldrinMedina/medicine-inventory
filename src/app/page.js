@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "../utils/api";
 import { useAuth } from "../context/AuthContext";
+import Link from "next/link"; // Ensure Link is imported
 
 export default function HomeLoginPage() {
   const router = useRouter();
@@ -12,9 +13,12 @@ export default function HomeLoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // From the second design
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError(null); // Clear error on new input
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,8 +30,7 @@ export default function HomeLoginPage() {
 
       if (res.success) {
         login(res.data.user, res.data.token);
-        // localStorage.setItem("token", res.data.token);
-        router.push("/dashboard"); // 👈 go to dashboard after login
+        router.push("/dashboard");
       } else {
         setError(res.message || "Login failed");
       }
@@ -39,62 +42,117 @@ export default function HomeLoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-md"
-      >
-        <h2 className="text-center text-2xl font-bold text-gray-800">
-           Login
-        </h2>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md">
+        {/* Card Container */}
+        <div className="rounded-2xl bg-white shadow-2xl overflow-hidden">
+          {/* Header Section */}
+          {/* Form Section */}
+          <div className="px-8 py-10">
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 rounded-lg bg-red-50 border-l-4 border-red-500 p-4">
+                <p className="text-sm text-red-700 font-medium">{error}</p>
+              </div>
+            )}
 
-        {error && (
-          <div className="rounded-md bg-red-100 p-2 text-red-700">{error}</div>
-        )}
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Email Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200 transition duration-200"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-            required
-          />
+              {/* Password Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 pr-16 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200 transition duration-200"
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Remember Me & Forgot Password */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                    Remember me
+                  </label>
+                </div>
+                <div className="text-sm">
+                  <a href="/forget_password" className="font-semibold text-blue-600 hover:text-blue-700">
+                    Forgot password?
+                  </a>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 font-bold text-white shadow-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transform transition duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {loading ? "Logging in..." : "Sign In"}
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative my-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-4 text-gray-500">Don't have an account?</span>
+              </div>
+            </div>
+
+            {/* Register Link */}
+            <Link
+              href="/register"
+              className="block w-full rounded-xl border-2 
+              border-blue-600 bg-white py-3 text-center font-semibold text-blue-600 
+              hover:bg-blue-50 transition duration-200"
+            >
+              Create New Account
+            </Link>
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-blue-600 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-
-        {/* <p className="text-center text-sm text-gray-600">
-          Don’t have an account?{" "}
-          <a href="/register" className="text-blue-600 hover:underline">
-            Register
-          </a>
-        </p> */}
-      </form>
+       
+      </div>
     </div>
   );
 }

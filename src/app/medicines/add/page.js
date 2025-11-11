@@ -3,13 +3,16 @@ import { useForm } from "react-hook-form";
 import api from "../../utils/api";
 import Router from "next/router";
 import ProtectedRoute from "../../components/ProtectedRoute";
+import { useAuth } from "../../context/AuthContext";
 
 export default function NewMedicine() {
   const { register, handleSubmit } = useForm();
+  const { user } = useAuth();
 
   const onSubmit = async (data) => {
     try {
-      await api.post("/medicines", data);
+      const payload = { ...data, createdBy: user?.id };
+      await api.post("/medicines", payload);
       Router.push("/medicines");
     } catch (err) {
       alert(err.response?.data?.message || "Create failed");
@@ -26,7 +29,7 @@ export default function NewMedicine() {
           <input {...register("manufacturer")} placeholder="Manufacturer" className="w-full p-2 border rounded" />
           <input {...register("dosage")} placeholder="Dosage" className="w-full p-2 border rounded" />
           <input {...register("batchNumber")} placeholder="Batch #" className="w-full p-2 border rounded" />
-          <input {...register("expiryDate")} type="date" className="w-full p-2 border rounded" />
+          <input {...register("expiryDate", {required:"Expiry date is required"})} type="date" className="w-full p-2 border rounded" />
           <input {...register("quantity", { valueAsNumber: true })} type="number" placeholder="Quantity" className="w-full p-2 border rounded" />
           <button className="bg-blue-600 text-white px-4 py-2 rounded">Create</button>
         </form>
