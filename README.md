@@ -209,8 +209,15 @@ Visit [http://localhost:3000](http://localhost:3000)
 ## 🧍‍♂️ Author
 
 **Aldrin Carandang Medina**
-📍 Batangas, Philippines
-💻 Full-stack Developer
-✉️ [medina.aldrin02@gmail.com](mailto:medina.aldrin02@gmail.com)
+* 📍 Batangas, Philippines
+* 💻 Full-stack Developer
+* ✉️ [medina.aldrin02@gmail.com](mailto:medina.aldrin02@gmail.com)
+
+## Team
+* Isaih Jordan 
+* Shaina Borres
+* Loren Sayas
+* Roxanne Recio
+
 
 
