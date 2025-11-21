@@ -1,7 +1,7 @@
 // pages/medicines/new.js
 import { useForm } from "react-hook-form";
 import api from "../../utils/api";
-import {useRouter} from "next/router";
+import {useRouter} from "next/navigation";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useAuth } from "../../context/AuthContext";
 
