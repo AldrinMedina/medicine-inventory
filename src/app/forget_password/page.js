@@ -50,7 +50,7 @@ export default function ForgotPassword() {
             </div>
             <h2 className="text-3xl font-bold text-white">Forgot Password?</h2>
             <p className="mt-2 text-blue-100">
-              No worries! Enter your email and we'll send you reset instructions
+              {"No worries! Enter your email and we'll send you reset instructions"}
             </p>
           </div>
 
@@ -97,7 +97,7 @@ export default function ForgotPassword() {
                   <p className="text-sm text-green-700 font-medium">{message}</p>
                 </div>
                 <p className="text-sm text-gray-600 mb-6">
-                  Didn't receive the email? Check your spam folder or try again.
+                  {"Didn't receive the email? Check your spam folder or try again."}
                 </p>
               </div>
             )}
