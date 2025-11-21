@@ -79,14 +79,10 @@ export default function UsersPage() {
       return;
     }
 
-    if (modalMode === "add" && !formData.password) {
-      setError("Password is required for new users");
-      return;
-    }
-
     let res;
     if (modalMode === "add") {
-      res = await addUser(formData);
+      const { username, email, role } = formData;
+      res = await addUser({ username, email, role });
     } else {
       // For edit, only send password if it's been changed
       const updateData = { ...formData };
@@ -277,20 +273,24 @@ export default function UsersPage() {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Password {modalMode === 'edit' && <span className="text-xs font-normal text-gray-500">(leave blank to keep current)</span>}
-                    </label>
-                    <input
-                      type="password"
-                      value={formData.password}
-                      onChange={(e) =>
-                        setFormData({ ...formData, password: e.target.value })
-                      }
-                      className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
-                      placeholder={modalMode === 'add' ? 'Enter password' : 'Enter new password (optional)'}
-                    />
-                  </div>
+                  {/* PASSWORD FIELD — only show in edit mode */}
+                  {modalMode === "edit" && (
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Password <span className="text-xs font-normal text-gray-500">(leave blank to keep current)</span>
+                      </label>
+                      <input
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) =>
+                          setFormData({ ...formData, password: e.target.value })
+                        }
+                        className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+                        placeholder="Enter new password (optional)"
+                      />
+                    </div>
+                  )}
+
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">

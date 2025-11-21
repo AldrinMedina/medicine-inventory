@@ -21,9 +21,9 @@ api.interceptors.request.use((config) => {
 //
 // -------- AUTH --------
 //
-export async function loginUser(email, password) {
+export async function loginUser(identifier, password) {
   try {
-    const res = await api.post("/auth/login", { email, password });
+    const res = await api.post("/auth/login", { identifier, password });
     return res.data;
   } catch (err) {
     return err.response?.data || { success: false, message: "Network error" };
@@ -130,6 +130,83 @@ export async function deleteMedicine(id) {
 }
 
 //
+// -------- DASHBOARD --------
+//
+
+// Get dashboard statistics
+export async function getDashboardStats() {
+  try {
+    const [medicinesRes, usersRes] = await Promise.all([
+      api.get("/medicines"),
+      api.get("/admin/users"),
+    ]);
+
+    const medicines = medicinesRes.data?.data || [];
+    const users = usersRes.data?.data || [];
+
+
+    const expiringSoon = medicines.filter((m) => {
+      const daysLeft =
+        (new Date(m.expiryDate) - new Date()) / (1000 * 60 * 60 * 24);
+      return daysLeft > 0 && daysLeft <= 30;
+    });
+
+    return {
+      totalMedicines: medicines.length,
+      activeUsers: users.length,
+      expiringSoonCount: expiringSoon.length,
+    };
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+// Get medicines expiring in 30 days
+export async function getExpiringSoonMedicines() {
+  try {
+    const res = await api.get("/medicines");
+    const medicines = res.data?.data || [];
+
+    return medicines
+      .map((m) => {
+        const daysLeft =
+          (new Date(m.expiryDate) - new Date()) /
+          (1000 * 60 * 60 * 24);
+        return { ...m, daysLeft: Math.ceil(daysLeft) };
+      })
+      .filter((m) => m.daysLeft > 0 && m.daysLeft <= 30)
+      .sort((a, b) => a.daysLeft - b.daysLeft);
+  } catch (err) {
+    return [];
+  }
+}
+
+// Get top 5 medicines by stock (for charts)
+export async function getTopStockMedicines() {
+  try {
+    const res = await api.get("/medicines");
+    const medicines = res.data?.data || [];
+
+    return medicines
+      .sort((a, b) => b.quantity - a.quantity)
+      .slice(0, 5);
+  } catch (err) {
+    return [];
+  }
+}
+
+export async function getRecentActivities() {
+  try {
+    const res = await api.get("/admin/recent-activities");
+    return res.data?.data || [];
+  } catch (err) {
+    return [];
+  }
+}
+
+
+//
 // -------- USERS --------
 //
 export async function getUsers() {
@@ -143,7 +220,7 @@ export async function getUsers() {
 
 export async function addUser(user) {
   try {
-    const res = await api.post("/auth/register", user);
+    const res = await api.post("auth/admin/create-user", user); // ADMIN CREATE USER
     return res.data;
   } catch (err) {
     return { success: false, message: "Error adding user" };

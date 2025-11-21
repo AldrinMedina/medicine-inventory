@@ -4,13 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "../utils/api";
 import { useAuth } from "../context/AuthContext";
+import { Eye, EyeOff } from 'lucide-react';
 import Link from "next/link"; // Ensure Link is imported
 
 export default function HomeLoginPage() {
   const router = useRouter();
   const { login } = useAuth();
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ identifier: "", password: "" });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // From the second design
@@ -26,7 +27,7 @@ export default function HomeLoginPage() {
     setError(null);
 
     try {
-      const res = await loginUser(formData.email, formData.password);
+      const res = await loginUser(formData.identifier, formData.password);
 
       if (res.success) {
         login(res.data.user, res.data.token);
@@ -61,15 +62,15 @@ export default function HomeLoginPage() {
               {/* Email Field */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email Address
+                  Email Address or Username
                 </label>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
+                  type="text"
+                  name="identifier"
+                  value={formData.identifier}
                   onChange={handleChange}
                   className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-200 transition duration-200"
-                  placeholder="you@example.com"
+                  placeholder="yourname or you@example.com"
                   required
                 />
               </div>
@@ -94,7 +95,7 @@ export default function HomeLoginPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-4 flex items-center text-sm text-blue-600 hover:text-blue-700 font-medium"
                   >
-                    {showPassword ? "Hide" : "Show"}
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
               </div>
