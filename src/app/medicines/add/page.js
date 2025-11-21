@@ -1,4 +1,5 @@
-// pages/medicines/new.js
+
+"use client";
 import { useForm } from "react-hook-form";
 import api from "../../../utils/api";
 import {useRouter} from "next/navigation";
