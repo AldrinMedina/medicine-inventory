@@ -1,6 +1,6 @@
 // pages/medicines/new.js
 import { useForm } from "react-hook-form";
-import api from "../../utils/api";
+import api from "../../../utils/api";
 import {useRouter} from "next/navigation";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useAuth } from "../../context/AuthContext";
@@ -8,12 +8,12 @@ import { useAuth } from "../../context/AuthContext";
 export default function NewMedicine() {
   const { register, handleSubmit } = useForm();
   const { user } = useAuth();
+  const router = useRouter();
 
   const onSubmit = async (data) => {
     try {
       const payload = { ...data, createdBy: user?.id };
       await api.post("/medicines", payload);
-      const router = useRouter();
       router.push("/medicines");
 
     } catch (err) {
