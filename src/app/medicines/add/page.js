@@ -1,7 +1,7 @@
 // pages/medicines/new.js
 import { useForm } from "react-hook-form";
 import api from "../../utils/api";
-import Router from "next/router";
+import {useRouter} from "next/router";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useAuth } from "../../context/AuthContext";
 
@@ -13,7 +13,9 @@ export default function NewMedicine() {
     try {
       const payload = { ...data, createdBy: user?.id };
       await api.post("/medicines", payload);
-      Router.push("/medicines");
+      const router = useRouter();
+      router.push("/medicines");
+
     } catch (err) {
       alert(err.response?.data?.message || "Create failed");
     }
