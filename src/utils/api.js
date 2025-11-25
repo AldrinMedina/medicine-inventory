@@ -220,7 +220,7 @@ export async function getUsers() {
 
 export async function addUser(user) {
   try {
-    const res = await api.post("auth/admin/create-user", user); // ADMIN CREATE USER
+    const res = await api.post("/auth/admin/create-user", user); // ADMIN CREATE USER
     return res.data;
   } catch (err) {
     return { success: false, message: "Error adding user" };
