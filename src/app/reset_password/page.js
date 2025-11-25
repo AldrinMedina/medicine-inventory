@@ -206,10 +206,10 @@ export default function ResetPassword() {
                         <div className={`h-1.5 w-1.5 rounded-full ${/\d/.test(password) ? 'bg-green-500' : 'bg-gray-300'}`} />
                         At least one number
                       </li>
-                      <li className="flex items-center gap-2">
+                      {/*<li className="flex items-center gap-2">
                         <div className={`h-1.5 w-1.5 rounded-full ${/[^a-zA-Z0-9]/.test(password) ? 'bg-green-500' : 'bg-gray-300'}`} />
                         At least one special character
-                      </li>
+                      </li>*/}
                     </ul>
                   </div>
 
