@@ -217,7 +217,7 @@ export default function DashboardLayout({ children }) {
           <div className="flex items-center justify-between px-6 py-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="hidden lg:flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg transition-all"
+              className="lg:hidden flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg transition-all"
             >
               <Menu className="h-6 w-6" />
             </button>
